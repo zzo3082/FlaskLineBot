@@ -1,14 +1,5 @@
-# Project Title
-
-This is a sample project to demonstrate pushing a folder to GitHub.
-
-## Getting Started
-
-To get started with this project, follow these steps:
-
-1. Clone the repository.
-2. Install dependencies.
-3. Run the project.
+# Flask Line Bot
+測試使用 flask 寫 linebot
 
 ## License
 
