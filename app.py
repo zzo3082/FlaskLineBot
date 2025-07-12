@@ -25,6 +25,7 @@ from linebot.v3.webhooks import (
 )
 import os
 
+# todo 試著把邏輯分類出去
 app = Flask(__name__)
 
 # 從 .env 撈敏感資訊
@@ -63,16 +64,7 @@ def callback():
 # 當 event 是 MessageEvent 這邊做事情
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    with ApiClient(configuration) as api_client:
-        # 1. 直接回傳echo範例
-        # line_bot_api = MessagingApi(api_client)
-        # line_bot_api.reply_message_with_http_info(
-        #     ReplyMessageRequest(
-        #         reply_token=event.reply_token, # 這是用戶傳訊息來的時候, 會附上的 reply token
-        #         messages=[TextMessage(text=event.message.text)]
-        #     )
-
-        
+    with ApiClient(configuration) as api_client:        
         line_bot_api = MessagingApi(api_client)
         # 2. 當輸入特定文字, 回傳postback讓用戶點擊
         if event.message.text == '優惠':
