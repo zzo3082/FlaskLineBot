@@ -17,27 +17,35 @@
    如果專案使用 `pyproject.toml` 定義依賴，可以使用以下指令安裝：
 
    ```bash
-   uv pip install .
+   pip install -e .
    ```
+   `-e` 讓虛擬環境建一個指向`app.py`的檔案, 而不是直接打包一份`app.py`進虛擬環境
 
-   或使用 `uv` 同步依賴：
-
-   ```bash
-   uv sync
-   ```
+   在開發時可以讓你在修改程式碼後立即測試，無需每次都重新運行 `pip install`。
 
 3. **使用** `uv`\
-   使用 `uv` 創建虛擬環境並安裝依賴：
-
+   `uv`把以下這些指令包起來執行
    ```bash
-   uv venv
-   uv pip install -r requirements.txt
+   python -m venv .venv
+   source .venv/bin/activate
+   deit pyproject.toml
+   pip install -e .
+   ```
+   
+   `uv`新增套件指令：
+   ```bash
+   uv add flask
    ```
 
-   或直接根據 `uv.lock` 同步依賴：
+   第三方拿到專案執行指令：
 
    ```bash
    uv sync
+   ```
+
+   透過`uv`來執行程式：
+   ```bash
+   uv run app.py
    ```
 
 4. **使用虛擬環境的好處**
