@@ -13,6 +13,9 @@ __pycache__/
 # 虛擬環境
 .venv/
 
+# log檔案
+.logs/
+
 # 其他常見忽略
 *.log
 *.bak

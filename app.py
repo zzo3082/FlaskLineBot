@@ -23,27 +23,27 @@ from linebot.v3.webhooks import (
     PostbackEvent, # 用戶點擊按鈕
     TextMessageContent
 )
-import os
+from config import ZZOConfig
+from logging_config import setup_logging
 
 # todo 試著把邏輯分類出去
 app = Flask(__name__)
+# 初始化日誌
+logger = setup_logging(app_name=app.name, log_file='logs/app.log')
 
-# 從 .env 撈敏感資訊
-zzo_access_token = os.getenv('LINE_ACCESS_TOKEN')
-zzo_channel_secret = os.getenv('LINE_CHANNEL_SECRET')
-
-# 檢查環境變數是否正確設置
-if not zzo_access_token or not zzo_channel_secret:
-    raise ValueError("LINE_ACCESS_TOKEN or LINE_CHANNEL_SECRET is not set in environment variables")
+# 把 config.py 的設定載入
+ZZOConfig.validate()
+logger.info("Configuration loaded successfully")
 
 # access_token 是 line channel 的存取碼
-configuration = Configuration(access_token=zzo_access_token)
 # 使用 webhook 監聽 channel 需要用到 Channel secret
-handler = WebhookHandler(zzo_channel_secret)
+configuration = Configuration(access_token=ZZOConfig.LINE_ACCESS_TOKEN)
+handler = WebhookHandler(ZZOConfig.LINE_CHANNEL_SECRET)
 
 # 這個是 post 方法, 路徑action是/callback
 @app.route("/callback", methods=['POST'])
 def callback():
+    logger.info("Received a callback request")
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
 
@@ -64,6 +64,7 @@ def callback():
 # 當 event 是 MessageEvent 這邊做事情
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
+    logger.info(f"Received message: {event.message.text} from user: {event.source.user_id}")
     with ApiClient(configuration) as api_client:        
         line_bot_api = MessagingApi(api_client)
         # 2. 當輸入特定文字, 回傳postback讓用戶點擊
